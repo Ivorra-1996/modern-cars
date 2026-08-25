@@ -26,6 +26,7 @@ export interface Car {
   engine: string;
   location: string;
   featured?: boolean;
+  watchers: number;
   bidHistory: Bid[];
 }
 
@@ -61,6 +62,7 @@ export const cars: Car[] = [
     engine: "4.0L Bóxer 6 cilindros",
     location: "Buenos Aires, AR",
     featured: true,
+    watchers: 34,
     bidHistory: [
       { bidder: "carlos_m", amount: 175000, date: "2026-08-23T18:40:00" },
       { bidder: "auto_fan88", amount: 170000, date: "2026-08-22T09:15:00" },
@@ -88,6 +90,7 @@ export const cars: Car[] = [
     engine: "3.9L V8 Biturbo",
     location: "Córdoba, AR",
     featured: true,
+    watchers: 41,
     bidHistory: [
       { bidder: "speedster_99", amount: 245000, date: "2026-08-23T20:10:00" },
       { bidder: "carlos_m", amount: 235000, date: "2026-08-21T11:30:00" },
@@ -114,6 +117,7 @@ export const cars: Car[] = [
     engine: "5.2L V10",
     location: "Rosario, AR",
     featured: true,
+    watchers: 56,
     bidHistory: [
       { bidder: "jrivera", amount: 298000, date: "2026-08-24T08:00:00" },
       { bidder: "auto_fan88", amount: 290000, date: "2026-08-23T22:45:00" },
@@ -141,6 +145,7 @@ export const cars: Car[] = [
     engine: "4.0L V8 Biturbo",
     location: "Mendoza, AR",
     featured: true,
+    watchers: 29,
     bidHistory: [
       { bidder: "auto_fan88", amount: 156000, date: "2026-08-23T15:00:00" },
       { bidder: "carlos_m", amount: 150000, date: "2026-08-21T10:10:00" },
@@ -166,6 +171,7 @@ export const cars: Car[] = [
     fuelType: "Nafta",
     engine: "3.0L 6 en línea Biturbo",
     location: "La Plata, AR",
+    watchers: 18,
     bidHistory: [{ bidder: "jrivera", amount: 98000, date: "2026-08-23T09:30:00" }],
   },
   {
@@ -188,6 +194,7 @@ export const cars: Car[] = [
     fuelType: "Nafta",
     engine: "4.0L V8 Biturbo",
     location: "Buenos Aires, AR",
+    watchers: 22,
     bidHistory: [],
   },
   {
@@ -210,6 +217,7 @@ export const cars: Car[] = [
     fuelType: "Nafta",
     engine: "3.8L V6 Biturbo",
     location: "Neuquén, AR",
+    watchers: 31,
     bidHistory: [],
   },
   {
@@ -232,6 +240,7 @@ export const cars: Car[] = [
     fuelType: "Nafta",
     engine: "4.0L V8 Biturbo",
     location: "Mar del Plata, AR",
+    watchers: 15,
     bidHistory: [],
   },
   {
@@ -254,6 +263,7 @@ export const cars: Car[] = [
     fuelType: "Nafta",
     engine: "6.2L V8",
     location: "Salta, AR",
+    watchers: 9,
     bidHistory: [{ bidder: "speedster_99", amount: 132000, date: "2026-08-20T17:40:00" }],
   },
   {
@@ -276,6 +286,7 @@ export const cars: Car[] = [
     fuelType: "Nafta",
     engine: "5.0L V8 Sobrealimentado",
     location: "Bariloche, AR",
+    watchers: 6,
     bidHistory: [{ bidder: "jrivera", amount: 88000, date: "2026-08-19T12:00:00" }],
   },
   {
@@ -298,6 +309,7 @@ export const cars: Car[] = [
     fuelType: "Nafta",
     engine: "2.9L V6 Biturbo",
     location: "Buenos Aires, AR",
+    watchers: 12,
     bidHistory: [
       { bidder: "carlos_m", amount: 118000, date: "2026-08-10T08:55:00" },
       { bidder: "auto_fan88", amount: 112000, date: "2026-08-09T19:20:00" },
@@ -323,6 +335,7 @@ export const cars: Car[] = [
     fuelType: "Nafta",
     engine: "5.2L V8 Sobrealimentado",
     location: "Rosario, AR",
+    watchers: 19,
     bidHistory: [
       { bidder: "speedster_99", amount: 145000, date: "2026-08-05T08:50:00" },
       { bidder: "jrivera", amount: 138000, date: "2026-08-04T21:10:00" },

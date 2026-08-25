@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams, Navigate, Link } from "react-router-dom";
+import { Eye, Gavel, Share2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -7,8 +8,18 @@ import { Layout } from "@/components/Layout";
 import { CarCard } from "@/components/CarCard";
 import { Car3DViewer } from "@/components/Car3DViewer";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
   Carousel,
   CarouselContent,
@@ -35,12 +46,27 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { cars, getCarById } from "@/data/cars";
 import { renderTimeLeft } from "@/lib/timeLeft";
+import { useSEO } from "@/hooks/useSEO";
 
 const statusLabels: Record<string, string> = {
   vigente: "Vigente",
   proximo: "Próxima",
   suspendido: "Suspendida",
   terminado: "Finalizada",
+};
+
+const statusRoutes: Record<string, string> = {
+  vigente: "/vigentes",
+  proximo: "/proximos",
+  suspendido: "/suspendidos",
+  terminado: "/terminadas",
+};
+
+const statusListLabels: Record<string, string> = {
+  vigente: "Vigentes",
+  proximo: "Próximos",
+  suspendido: "Suspendidos",
+  terminado: "Terminadas",
 };
 
 const CarDetail = () => {
@@ -50,7 +76,18 @@ const CarDetail = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentBid, setCurrentBid] = useState(car?.currentBid ?? 0);
   const [bidHistory, setBidHistory] = useState(car?.bidHistory ?? []);
+  const [loadedImages, setLoadedImages] = useState<Set<number>>(new Set());
   const { toast } = useToast();
+
+  useSEO({
+    title: car ? `${car.year} ${car.title}` : "Auto no encontrado",
+    description: car
+      ? `${car.description} Oferta actual: $${car.currentBid > 0 ? car.currentBid.toLocaleString() : car.startingBid.toLocaleString()}.`
+      : undefined,
+  });
+
+  const markImageLoaded = (index: number) =>
+    setLoadedImages((prev) => (prev.has(index) ? prev : new Set(prev).add(index)));
 
   const minBid = car
     ? currentBid > 0
@@ -87,6 +124,24 @@ const CarDetail = () => {
     form.reset({ amount: values.amount + car.bidIncrement });
   };
 
+  const handleShare = async () => {
+    const shareData = {
+      title: `${car.year} ${car.title} | AutoBids`,
+      text: `Mirá esta subasta: ${car.year} ${car.title}`,
+      url: window.location.href,
+    };
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // el usuario canceló el share, no hacemos nada
+      }
+      return;
+    }
+    await navigator.clipboard.writeText(shareData.url);
+    toast({ title: "Enlace copiado", description: "Ya podés pegarlo donde quieras." });
+  };
+
   const canBid = car.status === "vigente";
   const relatedCars = cars
     .filter((c) => c.id !== car.id && c.status === car.status)
@@ -95,6 +150,26 @@ const CarDetail = () => {
   return (
     <Layout>
       <div className="container py-12">
+        <Breadcrumb className="mb-6">
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to="/">Inicio</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link to={statusRoutes[car.status]}>{statusListLabels[car.status]}</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{car.title}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-4">
             <Carousel className="w-full">
@@ -104,12 +179,22 @@ const CarDetail = () => {
                     <button
                       type="button"
                       onClick={() => setLightboxOpen(true)}
-                      className="block w-full aspect-video rounded-lg overflow-hidden cursor-zoom-in"
+                      className="relative block w-full aspect-video rounded-lg overflow-hidden cursor-zoom-in"
                     >
+                      {!loadedImages.has(index) && (
+                        <Skeleton className="absolute inset-0 rounded-none" />
+                      )}
                       <img
+                        ref={(el) => {
+                          if (el?.complete) markImageLoaded(index);
+                        }}
                         src={img}
                         alt={`${car.title} ${index + 1}`}
-                        className="object-cover w-full h-full"
+                        onLoad={() => markImageLoaded(index)}
+                        className={cn(
+                          "object-cover w-full h-full",
+                          !loadedImages.has(index) && "opacity-0"
+                        )}
                       />
                     </button>
                   </CarouselItem>
@@ -196,9 +281,21 @@ const CarDetail = () => {
 
           <div>
             <Card className="p-6 sticky top-4 space-y-4">
-              <Badge className="bg-accent hover:bg-accent">
-                {statusLabels[car.status]}
-              </Badge>
+              <div className="flex items-center justify-between">
+                <Badge className="bg-accent hover:bg-accent">
+                  {statusLabels[car.status]}
+                </Badge>
+                <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <Eye className="w-3 h-3" />
+                    {car.watchers}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Gavel className="w-3 h-3" />
+                    {bidHistory.length}
+                  </span>
+                </div>
+              </div>
               <div>
                 <p className="text-sm text-muted-foreground">
                   {currentBid > 0 ? "Oferta actual" : "Oferta inicial"}
@@ -219,9 +316,11 @@ const CarDetail = () => {
                 {canBid ? "Ofertar" : "Subasta no disponible"}
               </Button>
               <Button asChild variant="outline" className="w-full">
-                <Link to={`/${car.status === "vigente" ? "vigentes" : car.status === "proximo" ? "proximos" : car.status === "suspendido" ? "suspendidos" : "terminadas"}`}>
-                  Ver más subastas
-                </Link>
+                <Link to={statusRoutes[car.status]}>Ver más subastas</Link>
+              </Button>
+              <Button variant="ghost" className="w-full gap-2" onClick={handleShare}>
+                <Share2 className="w-4 h-4" />
+                Compartir
               </Button>
             </Card>
           </div>
@@ -241,6 +340,8 @@ const CarDetail = () => {
                   currentBid={c.currentBid > 0 ? c.currentBid : c.startingBid}
                   timeLeft={renderTimeLeft(c)}
                   bidLabel={c.currentBid > 0 ? "Oferta actual" : "Oferta inicial"}
+                  bidCount={c.bidHistory.length}
+                  watchers={c.watchers}
                 />
               ))}
             </div>

@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useSEO } from "@/hooks/useSEO";
 
 const contactSchema = z.object({
   name: z.string().min(2, "Ingresá tu nombre"),
@@ -22,6 +23,11 @@ const contactSchema = z.object({
 });
 
 const Contacto = () => {
+  useSEO({
+    title: "Contacto",
+    description: "¿Tenés dudas sobre una subasta? Escribinos y te respondemos a la brevedad.",
+  });
+
   const { toast } = useToast();
   const form = useForm<z.infer<typeof contactSchema>>({
     resolver: zodResolver(contactSchema),

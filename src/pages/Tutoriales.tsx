@@ -1,6 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { Card } from "@/components/ui/card";
 import { PlayCircle } from "lucide-react";
+import { useSEO } from "@/hooks/useSEO";
 
 const tutorials = [
   {
@@ -30,6 +31,11 @@ const tutorials = [
 ];
 
 const Tutoriales = () => {
+  useSEO({
+    title: "Tutoriales",
+    description: "Aprendé a usar AutoBids paso a paso: cuenta, ofertas, pagos y más.",
+  });
+
   return (
     <Layout>
       <div className="container py-16">

@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useSEO } from "@/hooks/useSEO";
 
 const rules = [
   {
@@ -35,6 +36,11 @@ const rules = [
 ];
 
 const Reglamento = () => {
+  useSEO({
+    title: "Reglamento",
+    description: "Conocé las reglas de las subastas de AutoBids antes de ofertar.",
+  });
+
   return (
     <Layout>
       <div className="container py-16 max-w-3xl">

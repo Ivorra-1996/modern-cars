@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Car3DViewerProps {
   className?: string;
@@ -94,7 +95,7 @@ export const Car3DViewer = ({
   };
 
   if (!ready) {
-    return <div className={cn("w-full h-full", className)} aria-hidden />;
+    return <Skeleton className={cn("w-full h-full rounded-none", className)} />;
   }
 
   return (

@@ -3,8 +3,14 @@ import { CarCard } from "@/components/CarCard";
 import { useFavorites } from "@/context/FavoritesContext";
 import { getCarById } from "@/data/cars";
 import { renderTimeLeft } from "@/lib/timeLeft";
+import { useSEO } from "@/hooks/useSEO";
 
 const Favoritos = () => {
+  useSEO({
+    title: "Mis Favoritos",
+    description: "Los autos que marcaste como favoritos en AutoBids.",
+  });
+
   const { favorites } = useFavorites();
   const cars = favorites.map((id) => getCarById(id)).filter((car) => car !== undefined);
 
@@ -29,6 +35,8 @@ const Favoritos = () => {
                 currentBid={car.currentBid > 0 ? car.currentBid : car.startingBid}
                 timeLeft={renderTimeLeft(car)}
                 bidLabel={car.currentBid > 0 ? "Oferta actual" : "Oferta inicial"}
+                bidCount={car.bidHistory.length}
+                watchers={car.watchers}
               />
             ))}
           </div>

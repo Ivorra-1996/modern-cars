@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useSEO } from "@/hooks/useSEO";
 
 const faqs = [
   {
@@ -35,6 +36,11 @@ const faqs = [
 ];
 
 const Faq = () => {
+  useSEO({
+    title: "Preguntas frecuentes",
+    description: "Respuestas a las dudas más comunes sobre cómo funciona AutoBids.",
+  });
+
   return (
     <Layout>
       <div className="container py-16 max-w-3xl">

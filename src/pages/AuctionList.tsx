@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import { AuctionStatus, getCarsByStatus } from "@/data/cars";
 import { renderTimeLeft } from "@/lib/timeLeft";
+import { useSEO } from "@/hooks/useSEO";
 
 interface AuctionListProps {
   status: AuctionStatus;
@@ -24,6 +25,11 @@ const priceOf = (car: { currentBid: number; startingBid: number }) =>
   car.currentBid > 0 ? car.currentBid : car.startingBid;
 
 export const AuctionList = ({ status, title, emptyMessage }: AuctionListProps) => {
+  useSEO({
+    title,
+    description: `${title} en AutoBids: mirá los autos disponibles y hacé tu oferta.`,
+  });
+
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortOption>("default");
 
@@ -98,6 +104,8 @@ export const AuctionList = ({ status, title, emptyMessage }: AuctionListProps) =
                 currentBid={priceOf(car)}
                 timeLeft={renderTimeLeft(car)}
                 bidLabel={bidLabel}
+                bidCount={car.bidHistory.length}
+                watchers={car.watchers}
               />
             ))}
           </div>

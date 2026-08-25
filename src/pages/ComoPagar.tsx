@@ -1,6 +1,7 @@
 import { Layout } from "@/components/Layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Landmark, CreditCard, Wallet } from "lucide-react";
+import { useSEO } from "@/hooks/useSEO";
 
 const methods = [
   {
@@ -24,6 +25,11 @@ const methods = [
 ];
 
 const ComoPagar = () => {
+  useSEO({
+    title: "Cómo pagar",
+    description: "Métodos de pago disponibles para completar la compra de tu auto en AutoBids.",
+  });
+
   return (
     <Layout>
       <div className="container py-16">
