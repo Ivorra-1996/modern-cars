@@ -28,7 +28,7 @@ const ComoPagar = () => {
     <Layout>
       <div className="container py-16">
         <h1 className="section-title">Cómo pagar</h1>
-        <p className="text-gray-600 mb-8 max-w-2xl">
+        <p className="text-muted-foreground mb-8 max-w-2xl">
           Una vez que ganás una subasta, tenés 48 horas para completar el pago. Estos son
           los métodos disponibles.
         </p>
@@ -40,7 +40,7 @@ const ComoPagar = () => {
                 <CardTitle className="text-lg font-heading">{title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600">{description}</p>
+                <p className="text-muted-foreground">{description}</p>
               </CardContent>
             </Card>
           ))}

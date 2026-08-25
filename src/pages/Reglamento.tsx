@@ -39,7 +39,7 @@ const Reglamento = () => {
     <Layout>
       <div className="container py-16 max-w-3xl">
         <h1 className="section-title">Reglamento</h1>
-        <p className="text-gray-600 mb-8">
+        <p className="text-muted-foreground mb-8">
           Estas son las reglas que rigen todas las subastas en AutoBids. Te recomendamos
           leerlas antes de ofertar por primera vez.
         </p>

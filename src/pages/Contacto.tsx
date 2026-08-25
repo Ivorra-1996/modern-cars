@@ -40,7 +40,7 @@ const Contacto = () => {
     <Layout>
       <div className="container py-16 max-w-xl">
         <h1 className="section-title">Contacto</h1>
-        <p className="text-gray-600 mb-8">
+        <p className="text-muted-foreground mb-8">
           ¿Tenés dudas sobre una subasta o necesitás ayuda? Escribinos y te respondemos a la
           brevedad.
         </p>

@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "./ui/sheet";
 import { AuthDialog, AuthMode } from "./auth/AuthDialog";
+import { ThemeToggle } from "./ThemeToggle";
+import { useFavorites } from "@/context/FavoritesContext";
 import {
   Clock,
   Calendar,
@@ -16,6 +18,7 @@ import {
   LogIn,
   UserPlus,
   Menu,
+  Heart,
 } from "lucide-react";
 
 const navLinks = [
@@ -37,6 +40,7 @@ export const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authOpen, setAuthOpen] = useState(false);
   const [authMode, setAuthMode] = useState<AuthMode>("login");
+  const { favorites } = useFavorites();
 
   const openAuth = (mode: AuthMode) => {
     setAuthMode(mode);
@@ -45,7 +49,7 @@ export const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-sm">
+    <nav className="bg-background shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="text-2xl font-heading font-bold text-primary">
@@ -58,16 +62,29 @@ export const Navbar = () => {
                 <Link
                   key={to}
                   to={to}
-                  className="flex items-center gap-2 text-gray-600 hover:text-primary"
+                  className="flex items-center gap-2 text-muted-foreground hover:text-primary"
                 >
                   <Icon className="w-4 h-4" />
                   {label}
                 </Link>
               ))}
+              <Link
+                to="/favoritos"
+                className="flex items-center gap-2 text-muted-foreground hover:text-primary"
+              >
+                <Heart className="w-4 h-4" />
+                Favoritos
+                {favorites.length > 0 && (
+                  <span className="text-xs font-semibold bg-accent text-accent-foreground rounded-full px-1.5 py-0.5">
+                    {favorites.length}
+                  </span>
+                )}
+              </Link>
             </div>
           </div>
 
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-2">
+            <ThemeToggle />
             <Button variant="ghost" className="flex items-center gap-2" onClick={() => openAuth("login")}>
               <LogIn className="w-4 h-4" />
               Iniciar sesión
@@ -78,52 +95,68 @@ export const Navbar = () => {
             </Button>
           </div>
 
-          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon" aria-label="Abrir menú">
-                <Menu className="w-5 h-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="flex flex-col">
-              <SheetTitle className="text-primary font-heading">AutoBids</SheetTitle>
-              <div className="flex flex-col gap-4 mt-6">
-                {navLinks.map(({ to, label, icon: Icon }) => (
-                  <Link
-                    key={to}
-                    to={to}
-                    className="flex items-center gap-2 text-gray-600 hover:text-primary"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {label}
-                  </Link>
-                ))}
-                <div className="border-t pt-4 flex flex-col gap-4">
-                  {footerLinks.map(({ to, label, icon: Icon }) => (
+          <div className="flex items-center gap-1 lg:hidden">
+            <ThemeToggle />
+            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" aria-label="Abrir menú">
+                  <Menu className="w-5 h-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="flex flex-col">
+                <SheetTitle className="text-primary font-heading">AutoBids</SheetTitle>
+                <div className="flex flex-col gap-4 mt-6">
+                  {navLinks.map(({ to, label, icon: Icon }) => (
                     <Link
                       key={to}
                       to={to}
-                      className="flex items-center gap-2 text-gray-600 hover:text-primary"
+                      className="flex items-center gap-2 text-muted-foreground hover:text-primary"
                       onClick={() => setMobileOpen(false)}
                     >
                       <Icon className="w-4 h-4" />
                       {label}
                     </Link>
                   ))}
+                  <Link
+                    to="/favoritos"
+                    className="flex items-center gap-2 text-muted-foreground hover:text-primary"
+                    onClick={() => setMobileOpen(false)}
+                  >
+                    <Heart className="w-4 h-4" />
+                    Favoritos
+                    {favorites.length > 0 && (
+                      <span className="text-xs font-semibold bg-accent text-accent-foreground rounded-full px-1.5 py-0.5">
+                        {favorites.length}
+                      </span>
+                    )}
+                  </Link>
+                  <div className="border-t pt-4 flex flex-col gap-4">
+                    {footerLinks.map(({ to, label, icon: Icon }) => (
+                      <Link
+                        key={to}
+                        to={to}
+                        className="flex items-center gap-2 text-muted-foreground hover:text-primary"
+                        onClick={() => setMobileOpen(false)}
+                      >
+                        <Icon className="w-4 h-4" />
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
+                  <div className="border-t pt-4 flex flex-col gap-2">
+                    <Button variant="ghost" className="justify-start gap-2" onClick={() => openAuth("login")}>
+                      <LogIn className="w-4 h-4" />
+                      Iniciar sesión
+                    </Button>
+                    <Button className="justify-start gap-2" onClick={() => openAuth("register")}>
+                      <UserPlus className="w-4 h-4" />
+                      Registrarme
+                    </Button>
+                  </div>
                 </div>
-                <div className="border-t pt-4 flex flex-col gap-2">
-                  <Button variant="ghost" className="justify-start gap-2" onClick={() => openAuth("login")}>
-                    <LogIn className="w-4 h-4" />
-                    Iniciar sesión
-                  </Button>
-                  <Button className="justify-start gap-2" onClick={() => openAuth("register")}>
-                    <UserPlus className="w-4 h-4" />
-                    Registrarme
-                  </Button>
-                </div>
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </div>
 

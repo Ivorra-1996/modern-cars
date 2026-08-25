@@ -34,7 +34,7 @@ const Tutoriales = () => {
     <Layout>
       <div className="container py-16">
         <h1 className="section-title">Tutoriales</h1>
-        <p className="text-gray-600 mb-8 max-w-2xl">
+        <p className="text-muted-foreground mb-8 max-w-2xl">
           Mirá estos videos cortos para aprender a moverte por AutoBids y participar en tu
           primera subasta con confianza.
         </p>
@@ -46,7 +46,7 @@ const Tutoriales = () => {
               </div>
               <div className="p-4">
                 <h3 className="font-heading font-semibold mb-1">{tutorial.title}</h3>
-                <p className="text-sm text-gray-500">{tutorial.duration}</p>
+                <p className="text-sm text-muted-foreground">{tutorial.duration}</p>
               </div>
             </Card>
           ))}

@@ -2,6 +2,7 @@ import { Hero } from "@/components/Hero";
 import { CarCard } from "@/components/CarCard";
 import { Layout } from "@/components/Layout";
 import { getFeaturedCars } from "@/data/cars";
+import { renderTimeLeft } from "@/lib/timeLeft";
 
 const Index = () => {
   const featuredCars = getFeaturedCars();
@@ -20,7 +21,7 @@ const Index = () => {
               title={car.title}
               year={car.year}
               currentBid={car.currentBid}
-              timeLeft={car.timeLeft}
+              timeLeft={renderTimeLeft(car)}
             />
           ))}
         </div>
